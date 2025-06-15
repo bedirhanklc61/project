@@ -7,13 +7,13 @@ import { LanguageProvider } from './contexts/LanguageContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isLanguageChanging, setIsLanguageChanging] = useState(false);
 
   useEffect(() => {
-    // Simulate initial loading time
+    // Initial loading time
     const timer = setTimeout(() => {
-      setIsLoading(false);
+      setIsInitialLoading(false);
     }, 3000);
 
     return () => clearTimeout(timer);
@@ -21,7 +21,7 @@ function App() {
 
   const handleLanguageChange = () => {
     setIsLanguageChanging(true);
-    // Simulate language change processing time
+    // Language change processing time
     setTimeout(() => {
       setIsLanguageChanging(false);
     }, 1500);
@@ -31,9 +31,12 @@ function App() {
     <ThemeProvider>
       <LanguageProvider onLanguageChange={handleLanguageChange}>
         <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
-          <LoadingScreen isLoading={isLoading || isLanguageChanging} />
+          <LoadingScreen 
+            isLoading={isInitialLoading || isLanguageChanging} 
+            isInitialLoad={isInitialLoading}
+          />
           
-          {!isLoading && !isLanguageChanging && (
+          {!isInitialLoading && !isLanguageChanging && (
             <>
               <Header />
               <Menu />

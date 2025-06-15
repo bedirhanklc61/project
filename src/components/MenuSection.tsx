@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import React, { useState, useCallback } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface MenuItem {
@@ -26,10 +26,14 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   const [isOpen, setIsOpen] = useState(isInitiallyOpen);
   const { t, isRTL } = useLanguage();
 
+  const toggleSection = useCallback(() => {
+    setIsOpen(prev => !prev);
+  }, []);
+
   return (
     <div className="mb-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden border border-cafe-100 dark:border-gray-700">
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={toggleSection}
         className={`w-full p-6 flex items-center justify-between bg-gradient-to-r from-cafe-50 to-gold-50 dark:from-gray-800 dark:to-gray-700 hover:from-cafe-100 hover:to-gold-100 dark:hover:from-gray-700 dark:hover:to-gray-600 transition-all duration-300 ${isRTL ? 'flex-row-reverse' : ''}`}
         aria-expanded={isOpen}
         aria-controls={`menu-section-${title}`}

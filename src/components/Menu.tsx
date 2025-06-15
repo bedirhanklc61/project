@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Coffee, Snowflake, Cake, Utensils, Wind } from 'lucide-react';
 import { MenuSection } from './MenuSection';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -7,29 +7,32 @@ export const Menu: React.FC = () => {
   const { t } = useLanguage();
   const menuRef = useRef<HTMLDivElement>(null);
   const [visibleSections, setVisibleSections] = useState<Set<number>>(new Set());
+  const observerRef = useRef<IntersectionObserver | null>(null);
+
+  const handleIntersection = useCallback((entries: IntersectionObserverEntry[]) => {
+    entries.forEach((entry) => {
+      const sectionIndex = parseInt(entry.target.getAttribute('data-section-index') || '0');
+      
+      if (entry.isIntersecting) {
+        setVisibleSections(prev => new Set([...prev, sectionIndex]));
+      }
+    });
+  }, []);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const sectionIndex = parseInt(entry.target.getAttribute('data-section-index') || '0');
-          
-          if (entry.isIntersecting) {
-            setVisibleSections(prev => new Set([...prev, sectionIndex]));
-          }
-        });
-      },
-      { 
-        threshold: 0.2,
-        rootMargin: '-50px 0px -50px 0px'
-      }
-    );
+    // Create observer with optimized options
+    observerRef.current = new IntersectionObserver(handleIntersection, { 
+      threshold: 0.2,
+      rootMargin: '-50px 0px -50px 0px'
+    });
 
     const sections = menuRef.current?.querySelectorAll('.menu-section');
-    sections?.forEach((section) => observer.observe(section));
+    sections?.forEach((section) => observerRef.current?.observe(section));
 
-    return () => observer.disconnect();
-  }, []);
+    return () => {
+      observerRef.current?.disconnect();
+    };
+  }, [handleIntersection]);
 
   const menuData = [
     {
@@ -124,7 +127,7 @@ export const Menu: React.FC = () => {
                 title={t(section.titleKey)}
                 items={section.items}
                 icon={section.icon}
-                isInitiallyOpen={index === 0}
+                isInitiallyOpen={false}
               />
             </div>
           ))}

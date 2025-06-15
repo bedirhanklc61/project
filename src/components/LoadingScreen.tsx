@@ -4,9 +4,10 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 interface LoadingScreenProps {
   isLoading: boolean;
+  isInitialLoad?: boolean;
 }
 
-export const LoadingScreen: React.FC<LoadingScreenProps> = ({ isLoading }) => {
+export const LoadingScreen: React.FC<LoadingScreenProps> = ({ isLoading, isInitialLoad = false }) => {
   const { t } = useLanguage();
 
   if (!isLoading) return null;
@@ -23,7 +24,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ isLoading }) => {
           {t('cafe.name')}
         </h1>
         <p className="text-cafe-600 dark:text-cafe-300 text-lg animate-pulse">
-          {t('loading.language')}
+          {isInitialLoad ? t('loading.welcome') : t('loading.language')}
         </p>
         
         {/* Loading dots animation */}

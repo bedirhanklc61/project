@@ -17,6 +17,8 @@ const translations = {
     'cafe.name': 'Gazino Cafe',
     'cafe.location': 'Vakfıkebir, Trabzon',
     'cafe.quote': 'Her yudum bir hikaye, her kahve bir anı...',
+    'cafe.quote2': 'Karadeniz\'in sıcaklığını her fincanda hissedin...',
+    'cafe.quote3': 'Geleneksel lezzetler, modern dokunuşlarla buluşuyor...',
     'welcome.message': 'Gazino Cafe\'ye Hoş Geldiniz',
     'welcome.subtitle': 'Karadeniz\'in kalbinde, geleneksel lezzetlerle buluşun',
     
@@ -73,7 +75,7 @@ const translations = {
     'currency': '₺',
     
     // Common
-    'loading': 'Yükleniyor...',
+    'loading.welcome': 'Gazino Cafe\'ye Hoş Geldiniz...',
     'loading.language': 'Dil değiştiriliyor...',
     'menu': 'Menü',
   },
@@ -82,6 +84,8 @@ const translations = {
     'cafe.name': 'Gazino Cafe',
     'cafe.location': 'Vakfıkebir, Trabzon',
     'cafe.quote': 'Every sip tells a story, every coffee creates a memory...',
+    'cafe.quote2': 'Feel the warmth of the Black Sea in every cup...',
+    'cafe.quote3': 'Traditional flavors meet modern touches...',
     'welcome.message': 'Welcome to Gazino Cafe',
     'welcome.subtitle': 'Meet traditional flavors in the heart of the Black Sea',
     
@@ -138,7 +142,7 @@ const translations = {
     'currency': '$',
     
     // Common
-    'loading': 'Loading...',
+    'loading.welcome': 'Welcome to Gazino Cafe...',
     'loading.language': 'Changing language...',
     'menu': 'Menu',
   },
@@ -147,6 +151,8 @@ const translations = {
     'cafe.name': 'مقهى غازينو',
     'cafe.location': 'واقف كبير، طرابزون',
     'cafe.quote': 'كل رشفة تحكي قصة، كل قهوة تخلق ذكرى...',
+    'cafe.quote2': 'اشعر بدفء البحر الأسود في كل كوب...',
+    'cafe.quote3': 'النكهات التقليدية تلتقي باللمسات العصرية...',
     'welcome.message': 'مرحباً بكم في مقهى غازينو',
     'welcome.subtitle': 'التقوا بالنكهات التقليدية في قلب البحر الأسود',
     
@@ -203,7 +209,7 @@ const translations = {
     'currency': 'ل.ت',
     
     // Common
-    'loading': 'جاري التحميل...',
+    'loading.welcome': 'مرحباً بكم في مقهى غازينو...',
     'loading.language': 'جاري تغيير اللغة...',
     'menu': 'القائمة',
   }

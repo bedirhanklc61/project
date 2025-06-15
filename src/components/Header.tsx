@@ -6,7 +6,9 @@ import { useLanguage, Language } from '../contexts/LanguageContext';
 export const Header: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const { language, setLanguage, t, isRTL } = useLanguage();
-  const [isWelcomeVisible, setIsWelcomeVisible] = useState(false);
+  const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
+  const [isQuoteVisible, setIsQuoteVisible] = useState(false);
+  const [isAnimatingOut, setIsAnimatingOut] = useState(false);
 
   const languages: { code: Language; name: string; flag: string }[] = [
     { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
@@ -14,20 +16,45 @@ export const Header: React.FC = () => {
     { code: 'ar', name: 'العربية', flag: '🇸🇦' },
   ];
 
-  useEffect(() => {
-    // Trigger welcome text animation after component mounts
-    const timer = setTimeout(() => {
-      setIsWelcomeVisible(true);
-    }, 300);
+  const quotes = [
+    'cafe.quote',
+    'cafe.quote2',
+    'cafe.quote3'
+  ];
 
-    return () => clearTimeout(timer);
+  useEffect(() => {
+    // Start the quote animation after component mounts
+    const initialTimer = setTimeout(() => {
+      setIsQuoteVisible(true);
+    }, 500);
+
+    return () => clearTimeout(initialTimer);
   }, []);
+
+  useEffect(() => {
+    if (!isQuoteVisible) return;
+
+    const quoteTimer = setInterval(() => {
+      // Start exit animation
+      setIsAnimatingOut(true);
+      
+      setTimeout(() => {
+        // Change quote and start enter animation
+        setCurrentQuoteIndex((prev) => (prev + 1) % quotes.length);
+        setIsAnimatingOut(false);
+      }, 800); // Wait for exit animation to complete
+    }, 30000); // 30 seconds
+
+    return () => clearInterval(quoteTimer);
+  }, [isQuoteVisible, quotes.length]);
 
   return (
     <header className="relative min-h-screen bg-gradient-to-br from-cafe-100 via-gold-50 to-cafe-50 dark:from-gray-900 dark:via-gray-800 dark:to-cafe-950 overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10 dark:opacity-5">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23000000%22 fill-opacity=%220.1%22%3E%3Ccircle cx=%2230%22 cy=%2230%22 r=%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+        <div className="absolute inset-0" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+        }}></div>
       </div>
 
       {/* Navigation */}
@@ -82,20 +109,32 @@ export const Header: React.FC = () => {
       {/* Hero Content */}
       <div className="relative z-10 flex items-center justify-center min-h-[calc(100vh-200px)] px-6">
         <div className={`text-center max-w-4xl ${isRTL ? 'rtl' : 'ltr'}`}>
-          <div className={`mb-8 ${isWelcomeVisible ? 'animate-welcome-slide-in' : 'opacity-0'}`}>
+          <div className="mb-8">
             <h2 className="text-5xl lg:text-7xl font-serif font-bold text-cafe-800 dark:text-cafe-200 mb-6 leading-tight">
               {t('welcome.message')}
             </h2>
             <p className="text-xl lg:text-2xl text-cafe-600 dark:text-cafe-400 mb-8 leading-relaxed">
               {t('welcome.subtitle')}
             </p>
-            <blockquote className="text-lg lg:text-xl font-medium text-cafe-700 dark:text-cafe-300 italic border-l-4 border-gold-500 pl-6 max-w-2xl mx-auto">
-              {t('cafe.quote')}
-            </blockquote>
+            
+            {/* Rotating Quote */}
+            <div className="relative h-20 flex items-center justify-center overflow-hidden">
+              <blockquote 
+                className={`absolute text-lg lg:text-xl font-medium text-cafe-700 dark:text-cafe-300 italic border-l-4 border-gold-500 pl-6 max-w-2xl transition-all duration-800 ease-in-out ${
+                  isQuoteVisible && !isAnimatingOut
+                    ? 'opacity-100 translate-x-0' 
+                    : isAnimatingOut
+                    ? 'opacity-0 translate-x-full'
+                    : 'opacity-0 -translate-x-full'
+                }`}
+              >
+                {t(quotes[currentQuoteIndex])}
+              </blockquote>
+            </div>
           </div>
           
           {/* Scroll Indicator */}
-          <div className={`animate-bounce mt-16 ${isWelcomeVisible ? 'animate-fade-in-delayed' : 'opacity-0'}`}>
+          <div className="animate-bounce mt-16">
             <div className="w-6 h-10 border-2 border-cafe-400 dark:border-cafe-500 rounded-full flex justify-center">
               <div className="w-1 h-3 bg-cafe-400 dark:bg-cafe-500 rounded-full mt-2 animate-pulse"></div>
             </div>
